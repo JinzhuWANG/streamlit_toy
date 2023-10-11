@@ -4,6 +4,11 @@ import pandas as pd
 import warnings
 warnings.filterwarnings('ignore')
 
+import folium
+from streamlit_folium import st_folium
+import rasterio
+
+
 # Set the page title and icon
 st.set_page_config(page_title='Supermakert Sale', 
                    page_icon=':bar_chart:',
@@ -184,6 +189,30 @@ st.plotly_chart(fig, use_container_width=True)
 
 
 
+#######################################################
+#               Add a map to the webpage              #
+#######################################################
+
+# Add the GeoTIFF overlay
+raster_ds = rasterio.open('./data/Raster/lumap_2030_COG.tiff')
+raster_arr = raster_ds.read().squeeze(0)
+raster_bouds = raster_ds.bounds
+map = folium.Map(location=[-24.162,132.847], 
+                 zoom_start=5, 
+                 tiles='Stamen Terrain')
+
+image = folium.raster_layers.ImageOverlay(
+    name='GeoTIFF Layer',
+    image='https://storage.googleapis.com/luto_tif/lumap_2030_COG1.png',
+    bounds=[[raster_bouds.bottom, raster_bouds.left], 
+            [raster_bouds.top, raster_bouds.right]],
+    opacity=1,
+    interactive=True,
+    cross_origin=False,
+)
+image.add_to(map)
 
 
+# call to render Folium map in Streamlit
+st_data = st_folium(map, width=725)
 
