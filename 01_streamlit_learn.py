@@ -2,6 +2,7 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 import warnings
+import random
 warnings.filterwarnings('ignore')
 
 
@@ -9,6 +10,8 @@ from folium import Map, TileLayer
 from streamlit_folium import st_folium
 import requests
 import subprocess
+
+import time
 
 
 
@@ -168,6 +171,7 @@ with st.expander('Show the timeseries data'):
 #                  Show the tree map                  #
 #######################################################
 
+
 st.subheader('Tree Map for the filtered data')
 
 #  1) create the tree map
@@ -196,13 +200,13 @@ st.plotly_chart(fig, use_container_width=True)
 #               Add a map to the webpage              #
 #######################################################
 
-@st.cache_resource
+@st.cache
 def start_tiler():
     subprocess.run(['uvicorn','titiler.application.main:app'])
-    return None
-
+    return random.choice(range(1000))
+ 
 # start the server, and do not rerun when the page is refreshed
-server = start_tiler()
+start_tiler()
 
 # function to wrap the request
 def submit_request(BASE_URL, endpoint, url):
