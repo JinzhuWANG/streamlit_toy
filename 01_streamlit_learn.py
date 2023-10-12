@@ -9,6 +9,7 @@ from folium import Map, TileLayer
 from streamlit_folium import st_folium
 import requests
 import subprocess
+import time
 
 
 # Set the page title and icon
@@ -207,7 +208,6 @@ def submit_request(BASE_URL, endpoint, url):
     ).json()
     return r
 
-@st.cache_data
 def start_titiler_server():
     """Generates the Prisma Client and loads it
     """
@@ -217,12 +217,15 @@ def start_titiler_server():
 
     return True
 
-# start the titiler server
-start_titiler_server()
+# # trick to avoid stuck the streamlit app
+# start_titiler_server = st.cache_data(start_titiler_server)
+
+# # start the titiler server
+# start_titiler_server()
 
 
 # Add the GeoTIFF overlay
-titiler_endpoint = "http://127.0.0.1:8000" 
+titiler_endpoint = "http://titiler.xyz" 
 
 # the tif cloud storage url
 tif_url = 'https://storage.googleapis.com/luto_tif/lumap_2030_vis_cog.tif'
