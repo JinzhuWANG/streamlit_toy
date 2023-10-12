@@ -196,12 +196,13 @@ st.plotly_chart(fig, use_container_width=True)
 #               Add a map to the webpage              #
 #######################################################
 
-@st.cache_data
+@st.cache_resource
 def start_tiler():
     subprocess.run(['uvicorn','titiler.application.main:app'])
+    return None
 
 # start the server, and do not rerun when the page is refreshed
-start_tiler()
+server = start_tiler()
 
 # function to wrap the request
 def submit_request(BASE_URL, endpoint, url):
