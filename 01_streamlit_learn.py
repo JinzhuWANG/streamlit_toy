@@ -228,8 +228,17 @@ tileset = tile_json_analytic["tiles"][0]
 
 # instantiate the map
 map = Map(location=[-24.162,132.847], 
-                 zoom_start=5, 
-                 tiles='Stamen Terrain')
+                 zoom_start=5)
+
+base_layer = TileLayer(
+        tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        attr = 'Esri',
+        name = 'Esri Satellite',
+        overlay = False,
+        control = True
+       ).add_to(map)
+
+base_layer.add_to(map)
 
 tile_layer = TileLayer(
     tiles= tileset,
