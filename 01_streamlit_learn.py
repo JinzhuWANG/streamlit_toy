@@ -196,7 +196,7 @@ st.plotly_chart(fig, use_container_width=True)
 #               Add a map to the webpage              #
 #######################################################
 
-@st.cache_resource
+@st.cache_data
 def start_tiler():
     subprocess.run(['uvicorn','titiler.application.main:app'])
 
