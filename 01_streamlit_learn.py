@@ -2,7 +2,6 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 import warnings
-import random
 warnings.filterwarnings('ignore')
 
 
@@ -10,9 +9,6 @@ from folium import Map, TileLayer
 from streamlit_folium import st_folium
 import requests
 import subprocess
-
-import time
-
 
 
 # Set the page title and icon
@@ -210,6 +206,19 @@ def submit_request(BASE_URL, endpoint, url):
         }
     ).json()
     return r
+
+@st.cache_data
+def start_titiler_server():
+    """Generates the Prisma Client and loads it
+    """
+    print(f'Starting Titiler Service')
+    subprocess.call(["uvicorn", "titiler.application.main:app"])
+    print(f'Titiler Service Started')
+
+    return True
+
+# start the titiler server
+start_titiler_server()
 
 
 # Add the GeoTIFF overlay
