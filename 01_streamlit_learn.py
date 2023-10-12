@@ -200,13 +200,6 @@ st.plotly_chart(fig, use_container_width=True)
 #               Add a map to the webpage              #
 #######################################################
 
-@st.cache
-def start_tiler():
-    subprocess.run(['uvicorn','titiler.application.main:app'])
-    return random.choice(range(1000))
- 
-# start the server, and do not rerun when the page is refreshed
-start_tiler()
 
 # function to wrap the request
 def submit_request(BASE_URL, endpoint, url):
@@ -218,23 +211,19 @@ def submit_request(BASE_URL, endpoint, url):
     ).json()
     return r
 
+
 # Add the GeoTIFF overlay
-titiler_endpoint = "http://127.0.0.1:8000"
+titiler_endpoint = "http://127.0.0.1:8000" 
+
+# the tif cloud storage url
 tif_url = 'https://storage.googleapis.com/luto_tif/lumap_2030_vis_cog.tif'
 
 
-# get tile data from titiler
-tile_json_analytic = submit_request(titiler_endpoint, "cog/tilejson.json", tif_url)
-left, bottom, right, top = (tile_json_analytic["bounds"][0], 
-                            tile_json_analytic["bounds"][1], 
-                            tile_json_analytic["bounds"][2], 
-                            tile_json_analytic["bounds"][3])
-tileset = tile_json_analytic["tiles"][0]
-
 # instantiate the map
 map = Map(location=[-24.162,132.847], 
-                 zoom_start=5)
+         zoom_start=5)
 
+# base map layer
 base_layer = TileLayer(
         tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         attr = 'Esri',
@@ -244,6 +233,10 @@ base_layer = TileLayer(
        ).add_to(map)
 
 base_layer.add_to(map)
+
+# get tile data from titiler
+tile_json_analytic = submit_request(titiler_endpoint, "cog/tilejson.json", tif_url)
+tileset = tile_json_analytic["tiles"][0]
 
 tile_layer = TileLayer(
     tiles= tileset,
@@ -255,4 +248,3 @@ tile_layer.add_to(map)
 
 # call to render Folium map in Streamlit
 st_data = st_folium(map, width=725)
-
