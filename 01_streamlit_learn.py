@@ -4,9 +4,12 @@ import pandas as pd
 import warnings
 warnings.filterwarnings('ignore')
 
-import folium
+
+from folium import Map, TileLayer
 from streamlit_folium import st_folium
-import rasterio
+import requests
+import subprocess
+
 
 
 # Set the page title and icon
@@ -193,24 +196,47 @@ st.plotly_chart(fig, use_container_width=True)
 #               Add a map to the webpage              #
 #######################################################
 
+@st.cache_resource
+def start_tiler():
+    subprocess.run(['uvicorn','titiler.application.main:app'])
+
+# start the server, and do not rerun when the page is refreshed
+start_tiler()
+
+# function to wrap the request
+def submit_request(BASE_URL, endpoint, url):
+    r = requests.get(
+        f"{BASE_URL}/{endpoint}",
+        params = {
+            "url": url,
+        }
+    ).json()
+    return r
+
 # Add the GeoTIFF overlay
-raster_ds = rasterio.open('./data/Raster/lumap_2030_COG.tiff')
-raster_arr = raster_ds.read().squeeze(0)
-raster_bouds = raster_ds.bounds
-map = folium.Map(location=[-24.162,132.847], 
+titiler_endpoint = "http://127.0.0.1:8000"
+tif_url = 'https://storage.googleapis.com/luto_tif/lumap_2030_vis_cog.tif'
+
+
+# get tile data from titiler
+tile_json_analytic = submit_request(titiler_endpoint, "cog/tilejson.json", tif_url)
+left, bottom, right, top = (tile_json_analytic["bounds"][0], 
+                            tile_json_analytic["bounds"][1], 
+                            tile_json_analytic["bounds"][2], 
+                            tile_json_analytic["bounds"][3])
+tileset = tile_json_analytic["tiles"][0]
+
+# instantiate the map
+map = Map(location=[-24.162,132.847], 
                  zoom_start=5, 
                  tiles='Stamen Terrain')
 
-image = folium.raster_layers.ImageOverlay(
-    name='GeoTIFF Layer',
-    image='https://storage.googleapis.com/luto_tif/lumap_2030_COG1.png',
-    bounds=[[raster_bouds.bottom, raster_bouds.left], 
-            [raster_bouds.top, raster_bouds.right]],
-    opacity=1,
-    interactive=True,
-    cross_origin=False,
+tile_layer = TileLayer(
+    tiles= tileset,
+    attr="Sample COG"
 )
-image.add_to(map)
+
+tile_layer.add_to(map)
 
 
 # call to render Folium map in Streamlit
