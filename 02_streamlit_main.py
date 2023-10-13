@@ -9,7 +9,7 @@ from folium import Map, TileLayer
 from streamlit_folium import st_folium
 import requests
 import subprocess
-import time
+
 
 
 # Set the page title and icon
@@ -228,7 +228,7 @@ def start_titiler_server():
 titiler_endpoint = "http://titiler.xyz" 
 
 # the tif cloud storage url
-tif_url = 'https://storage.googleapis.com/luto_tif/lumap_2030_vis_cog.tif'
+tif_url = 'https://storage.googleapis.com/luto_tif/ammap_ecological_grazing_2030_colored.tiff'
 
 
 # instantiate the map
@@ -252,7 +252,7 @@ tileset = tile_json_analytic["tiles"][0]
 
 tile_layer = TileLayer(
     tiles= tileset,
-    attr="Sample COG"
+    attr="LUTO Land Use Map",
 )
 
 tile_layer.add_to(map)

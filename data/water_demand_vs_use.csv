@@ -1,0 +1,14 @@
+REGION_ID,REGION_NAME,WATER_USE_LIMIT_ML,TOT_WATER_REQ_ML,ABS_DIFF_ML,PROPORTION_%
+1,Tanami-Timor Sea Coast,"1,964,736.00","201,201.69","-1,763,534.25",10.24
+2,South Western Plateau,"4,894.79","4,894.79",0.00,100.00
+3,South West Coast,"283,917.19","283,916.78",-0.41,100.00
+4,Tasmania,"2,225,447.00","1,155,306.38","-1,070,140.62",51.91
+5,South East Coast (Victoria),"839,813.31","839,813.38",0.06,100.00
+6,South Australian Gulf,"56,232.90","56,232.90",0.00,100.00
+7,Murray-Darling Basin,"2,591,305.75","2,591,273.50",-32.25,100.00
+8,Pilbara-Gascoyne,"2,135.91","2,135.91",0.00,100.00
+9,North Western Plateau,"3,285.25","1,997.28","-1,287.97",60.80
+10,South East Coast (NSW),"4,739,225.50","4,739,225.50",0.00,100.00
+11,Carpentaria Coast,"3,732,140.00","65,997.48","-3,666,142.50",1.77
+12,Lake Eyre Basin,"16,623.88","16,623.87",-0.02,100.00
+13,North East Coast,"7,873,138.00","3,013,221.50","-4,859,916.50",38.27
