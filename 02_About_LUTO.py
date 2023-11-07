@@ -3,10 +3,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-from folium import Map, TileLayer
-from streamlit_folium import st_folium
-import requests
-import subprocess
 
 
 
